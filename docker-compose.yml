@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+
+########################################################################################################
+  jenkins:
+    image: docker-jenkins:1.0
+    build: jenkins
+    container_name: jenkins-web
+      # remove the '#' below only if you want access from remote JNLP agents
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      # Ensure Jenkins content persist between restarts.
+      - ./jenkins/jenkins_home:/var/jenkins_home 
+      # remove the '#' if you want to run blueocean docker agents (advanced only)
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - http_port=8080
+    restart: always
+    networks:
+      - web 
+      
+#########################################################################################################
+
+  catapp:
+    image:  mikesir87/cats:1.0
+    container_name: catapp-web
+    ports:
+     - "8090:8090"
+    expose:
+     - "5000:5000"
+      # remove the '#' below only if you want access from remote JNLP agents
+    environment:
+      - http_port=8090
+    restart: always
+    networks:
+      - web 
+########################################################################################
+
+
+networks:
+  web:
+    external: true
