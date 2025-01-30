@@ -35,6 +35,13 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
 # Set permissions for Jenkins to run Docker
 #RUN sudo chown -R jenkins:jenkins /var/run/docker.sock
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+
+RUN curl -L https://github.com/OctopusDeploy/OctopusCLI/releases/download/v9.1.7/OctopusTools.9.1.7.linux-x64.tar.gz \
+    | tar xz -C /usr/local/bin
+
+RUN chmod +x /usr/local/bin
+RUN /usr/local/bin/octo VERSION
+ 
     
 USER jenkins
 
